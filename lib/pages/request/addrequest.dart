@@ -14,21 +14,25 @@ Map<String, String> myheaders = {
   'authorization': basicAuth
 };
 
-Future addRequestWithImageOne(url, data, File image) async {
-  var stream = new http.ByteStream(image.openRead());
-  stream.cast();
-  var length = await image.length();
+Future addRequestWithImageOne(url, data, [File image]) async {
   var uri = Uri.parse(url);
   var request = new http.MultipartRequest("POST", uri);
   request.headers.addAll(myheaders);
-  var multipartFile = new http.MultipartFile("file", stream, length,
-      filename: basename(image.path));
+
+  if (image != null) {
+    var length = await image.length();
+    var stream = new http.ByteStream(image.openRead());
+    stream.cast();
+    var multipartFile = new http.MultipartFile("file", stream, length,
+        filename: basename(image.path));
+    request.files.add(multipartFile);
+  }
+
   // add Data to request
   data.forEach((key, value) {
     request.fields[key] = value;
   });
   // add Data to request
-  request.files.add(multipartFile);
   // Send Request
   var myrequest = await request.send();
   // For get Response Body
