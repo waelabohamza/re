@@ -1,6 +1,7 @@
 import 'package:adminyaser/const.dart';
 import 'package:adminyaser/linkapi.dart';
 import 'package:adminyaser/pages/codes/addcodes.dart';
+import 'package:adminyaser/pages/items/edititems.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
@@ -15,6 +16,11 @@ class _ItemsListState extends State<ItemsList> {
   @override
   Widget build(BuildContext context) {
     return InkWell(
+      onTap: (){
+        Navigator.of(context).push(MaterialPageRoute(builder:(context){
+                  return EditItems(items: widget.items) ; 
+        }));
+      },
       child: Card(
         child: Container(
           child: Row(

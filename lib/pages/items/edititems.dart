@@ -9,13 +9,14 @@ import 'package:adminyaser/pages/request/addrequest.dart';
 import 'package:dropdown_search/dropdownSearch.dart';
 import 'package:flutter/material.dart';
 
-class AddItems extends StatefulWidget {
-  AddItems({Key key}) : super(key: key);
+class EditItems extends StatefulWidget {
+  final items ; 
+  EditItems({Key key , this.items}) : super(key: key);
   @override
-  _AddItemsState createState() => _AddItemsState();
+  _EditItemsState createState() => _EditItemsState();
 }
 
-class _AddItemsState extends State<AddItems> {
+class _EditItemsState extends State<EditItems> {
   // Instance Crud For Create Delete Update Read DataBase
   Crud crud = new Crud();
   // File
@@ -51,68 +52,22 @@ class _AddItemsState extends State<AddItems> {
     filetwo = await myChooseGallery();
     setState(() {});
   }
-  // Add Categories To DataBase
-
-  // For DropDown
-
-  List<dynamic> datadropdowncat = List();
-  List<dynamic> datadropdowncatname = List();
-  String catname;
-  var catid;
-// For Subcategories
-  List<dynamic> datadropdownsubcat = List();
-  List<dynamic> datadropdownsubcatname = List();
-  String subcatname;
-  var subcatid;
-
-  void getCatName() async {
-    var listData = await crud.readData(linkcategories);
-    for (int i = 0; i < listData.length; i++)
-      setState(() {
-        datadropdowncat.add(listData[i]);
-        datadropdowncatname.add(listData[i]['categories_name']);
-      });
-
-    // print("data : $listData");
-  }
-
-  getSubCatName(catid) async {
-    datadropdownsubcat.clear();
-    datadropdownsubcatname.clear();
-    var listData =
-        await crud.writeData(linksubcategories, {"id": catid.toString()});
-    if (listData[0] != "falid") {
-      for (int a = 0; a < listData.length; a++)
-        setState(() {
-          datadropdownsubcat.add(listData[a]);
-          datadropdownsubcatname.add(listData[a]['subcategories_name']);
-        });
-    }
-
-    // print("data : $listData");
-  }
+ 
 
   @override
   void initState() {
     super.initState();
-    getCatName();
-   
+    
   }
 
-  addItem() async {
-    if (subcatname == null)
-      return showAlertOneChoose(
-          context, "warning", "هام", "الرجاء اختيار اسم القسم");
-    if (file == null || filetwo == null)
-      return showAlertOneChoose(
-          context, "warning", "هام", "الرجاء اختيار الصور");
+  editItem() async {
+    
 
     var formdata = formstate.currentState;
     if (formdata.validate()) {
       showLoading(context);
       var data = {
         "name": itemsname.text.toString(),
-        "catid": subcatid.toString(),
         "point": point.text.toString(),
         "price": usa.text.toString(),
         "desc": desc.text.toString(),
@@ -135,11 +90,8 @@ class _AddItemsState extends State<AddItems> {
 
   int offer = 0;
   @override
-  void dispose() {
-    datadropdowncat.clear();
-    datadropdowncatname.clear();
-    datadropdownsubcat.clear();
-    datadropdownsubcatname.clear();
+  void dispose(){
+   
     super.dispose();
   }
 
@@ -157,36 +109,6 @@ class _AddItemsState extends State<AddItems> {
               child: Column(
                 children: [
                   // buildFormText("ادخل اسم المنتج الفرعي", itemsname, "name"),
-                  DropdownSearch(
-                    items: datadropdowncatname,
-                    label: "ادخل هنا اسم القسم  الذي تريد",
-                    mode: Mode.BOTTOM_SHEET,
-                    onChanged: (val) async {
-                      setState(() {
-                        catname = val;
-                      });
-
-                      catid = getIdByNameInListCat(val, datadropdowncat);
-                      await getSubCatName(catid);
-                      // setState(() {});
-                    },
-                    selectedItem: "اسم القسم",
-                  ),
-                  SizedBox(height: 10),
-                  DropdownSearch(
-                    enabled: catname == null ? false : true,
-                    items: datadropdownsubcatname,
-                    label: "ادخل هنا اسم القسم الفرعي  الذي تريد",
-                    mode: Mode.BOTTOM_SHEET,
-                    onChanged: (val) {
-                      subcatname = val;
-                      subcatid =
-                          getIdByNameInListSubCat(val, datadropdownsubcat);
-                      print(subcatid);
-                      print(val);
-                    },
-                    selectedItem: "اسم القسم الفرعي",
-                  ),
                   buildFormText("ادخل اسم المنتج الفرعي", Icons.insert_comment,
                       itemsname, "name"),
                   buildFormText("ادخل الوصف", Icons.article, desc, "desc"),
@@ -286,7 +208,7 @@ class _AddItemsState extends State<AddItems> {
                     ],
                   ),
                   RaisedButton(
-                    onPressed: addItem,
+                    onPressed: editItem,
                     padding: EdgeInsets.symmetric(horizontal: 70),
                     color: maincolor,
                     textColor: Colors.white,

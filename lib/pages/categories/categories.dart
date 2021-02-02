@@ -20,9 +20,11 @@ class _CategoriesState extends State<Categories> {
   bool loading = true;
   int b = 0;
   getCategories(int a) async {
-    setState(() {
+   if(this.mounted){
+      setState(() {
       loading = true;
     });
+   }
     var url = "$linkcategories?page=$a";
     // await Future.delayed(Duration(seconds: 2));// من اجل التجربة
     var response = await http.get(url);
@@ -31,9 +33,11 @@ class _CategoriesState extends State<Categories> {
       if (responsebody[0] != "falid") {
         categories.add(responsebody[i]);
       }
-    setState(() {
+  if(this.mounted){
+      setState(() {
       loading = false;
     });
+   }
     print(categories);
   }
   @override
