@@ -1,4 +1,5 @@
 import 'package:adminyaser/linkapi.dart';
+import 'package:adminyaser/pages/subcategories/editsubcategories.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
@@ -13,6 +14,11 @@ class _SubCategoriesListState extends State<SubCategoriesList> {
   @override
   Widget build(BuildContext context) {
     return InkWell(
+      onTap: (){
+        Navigator.of(context).push(MaterialPageRoute(builder: (context){
+               return EditSubCategories(subcategories: widget.subcategories) ; 
+        })) ; 
+      },
       child: Card(
         child: Container(
           child: Row(

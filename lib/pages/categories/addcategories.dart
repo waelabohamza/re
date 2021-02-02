@@ -22,6 +22,7 @@ class _AddCategoriesState extends State<AddCategories> {
   // End File
   GlobalKey<FormState> formstate = new GlobalKey<FormState>();
   TextEditingController categoriesname = new TextEditingController();
+  
 // For ImagePicker Choose Image
   _chooseCamera() async {
     file = await myChooseCamera();
